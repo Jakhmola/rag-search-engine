@@ -190,19 +190,30 @@ def semantic_chunk(
     text = text.strip()
     if not text:
         return []
+
     sentences = re.split(r"(?<=[.!?])\s+", text)
-    sentences = [sentence.strip() for sentence in sentences]
-    if len(sentences) == 1 and not sentences[0].endswith((".", "!", "?")):
-        return sentences
+
+    if len(sentences) == 1 and not text.endswith((".", "!", "?")):
+        sentences = [text]
+
     chunks = []
     i = 0
     n_sentences = len(sentences)
+
     while i < n_sentences:
         chunk_sentences = sentences[i : i + max_chunk_size]
         if chunks and len(chunk_sentences) <= overlap:
             break
-        chunks.append(" ".join(chunk_sentences))
+
+        cleaned_sentences = []
+        for chunk_sentence in chunk_sentences:
+            cleaned_sentences.append(chunk_sentence.strip())
+        if not cleaned_sentences:
+            continue
+        chunk = " ".join(cleaned_sentences)
+        chunks.append(chunk)
         i += max_chunk_size - overlap
+
     return chunks
 
 
@@ -225,6 +236,7 @@ class ChunkedSemanticSearch(SemanticSearch):
 
     def build_chunk_embeddings(self, documents: list[dict]) -> np.ndarray:
         self.documents = documents
+
         self.document_map = {}
         for doc in documents:
             self.document_map[doc["id"]] = doc

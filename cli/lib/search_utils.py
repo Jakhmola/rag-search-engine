@@ -2,6 +2,9 @@ import json
 import os
 from typing import Any
 
+DEFAULT_ALPHA = 0.5
+RRF_K = 60
+
 DEFAULT_SEARCH_LIMIT = 5
 DOCUMENT_PREVIEW_LENGTH = 100
 SCORE_PRECISION = 3
@@ -57,16 +60,3 @@ def format_search_result(
         "score": round(score, SCORE_PRECISION),
         "metadata": metadata if metadata else {},
     }
-    
-def get_normalize_scores(scores: list[float]) -> float:
-    if not scores:
-        return
-    min_score = min(scores)
-    max_score = max(scores)
-    result = []
-    if min_score == max_score:
-        result.extend([1.0]* len(scores))
-    else: 
-        for score in scores:
-            result.append(((score - min_score) / (max_score - min_score)))
-    return result
