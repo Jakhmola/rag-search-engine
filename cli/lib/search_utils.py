@@ -57,3 +57,16 @@ def format_search_result(
         "score": round(score, SCORE_PRECISION),
         "metadata": metadata if metadata else {},
     }
+    
+def get_normalize_scores(scores: list[float]) -> float:
+    if not scores:
+        return
+    min_score = min(scores)
+    max_score = max(scores)
+    result = []
+    if min_score == max_score:
+        result.extend([1.0]* len(scores))
+    else: 
+        for score in scores:
+            result.append(((score - min_score) / (max_score - min_score)))
+    return result
