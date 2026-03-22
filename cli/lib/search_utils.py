@@ -5,7 +5,6 @@ from typing import Any
 DEFAULT_ALPHA = 0.5
 RRF_K = 60
 SEARCH_MULTIPLIER = 5
-TOP_K = 5
 
 DEFAULT_SEARCH_LIMIT = 5
 DOCUMENT_PREVIEW_LENGTH = 100
@@ -64,15 +63,6 @@ def format_search_result(
         "metadata": metadata if metadata else {},
     }
 
-def format_precision_results(
-    query: str, precision_score: float, retrieved: list[str], relevant: list[str]
-    ) -> dict[str, Any]:
-    return {
-        "query": query,
-        "precision_score": precision_score,
-        "retrieved_docs": retrieved,
-        "relevant_docs": relevant
-    }
 
 def load_golden_dataset() -> dict:
     with open(GOLDEN_DATASET_PATH, "r") as f:
