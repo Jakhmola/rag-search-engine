@@ -5,6 +5,7 @@ from typing import Any
 DEFAULT_ALPHA = 0.5
 RRF_K = 60
 SEARCH_MULTIPLIER = 5
+TOP_K = 5
 
 DEFAULT_SEARCH_LIMIT = 5
 DOCUMENT_PREVIEW_LENGTH = 100
@@ -16,6 +17,7 @@ BM25_B = 0.75
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 DATA_PATH = os.path.join(PROJECT_ROOT, "data", "movies.json")
 STOPWORDS_PATH = os.path.join(PROJECT_ROOT, "data", "stopwords.txt")
+GOLDEN_DATASET_PATH = os.path.join(PROJECT_ROOT, "data", "golden_dataset.json")
 
 CACHE_DIR = os.path.join(PROJECT_ROOT, "cache")
 
@@ -61,3 +63,17 @@ def format_search_result(
         "score": round(score, SCORE_PRECISION),
         "metadata": metadata if metadata else {},
     }
+
+def format_precision_results(
+    query: str, precision_score: float, retrieved: list[str], relevant: list[str]
+    ) -> dict[str, Any]:
+    return {
+        "query": query,
+        "precision_score": precision_score,
+        "retrieved_docs": retrieved,
+        "relevant_docs": relevant
+    }
+
+def load_golden_dataset() -> dict:
+    with open(GOLDEN_DATASET_PATH, "r") as f:
+        return json.load(f)

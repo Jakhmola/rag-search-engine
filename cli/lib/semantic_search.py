@@ -2,8 +2,18 @@ import json
 import os
 import re
 
+
 import numpy as np
 from sentence_transformers import SentenceTransformer
+
+from dotenv import load_dotenv
+load_dotenv()
+os.environ["HF_TOKEN"] = os.environ.get("HF_TOKEN")
+os.environ["TRANSFORMERS_VERBOSITY"] = "error"
+os.environ["HF_HUB_DISABLE_PROGRESS_BARS"] = "1"
+
+from transformers import logging as hf_logging
+hf_logging.set_verbosity_error()
 
 from .search_utils import (
     CHUNK_EMBEDDINGS_PATH,
